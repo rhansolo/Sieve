@@ -1,32 +1,25 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include "sieve.h"
 
-int primes[10001] = { 2, 3 };
+int sieve(int num){
+    int limit = (int)(num*log(num)*1.15);
+    int *arr = calloc(sizeof(int),limit);
+    int count = 0;
+    for (int i = 2; i < limit; i++){
+        if (! arr[i]){
+            count+=1;
 
-int main (){
-sieve(10001);
-}
-int sieve(int N)
-{
-    for (int n = 2; n < N; n++) {
-        for (int x = primes[n - 1] + 2; ; x += 2) {
-            bool prime = true;
-            for (int i = 0; i < n; i++) {
-                int p = primes[i];
-                if (p * p > x) {
-                    break;
-                }
-                if (x % p == 0) {
-                    prime = false;
-                    break;
-                }
+            if (count == num){
+                return i;
             }
-            if (prime) {
-                primes[n] = x;
-                break;
+
+            for (int j = i*2; j < limit; j+=i){
+                if (!arr[j]){
+                    arr[j]+=1;
+                }
             }
         }
+        
     }
-
-    printf ("%d\n", primes[N - 1]);
+    free(arr);
+    return -1;
 }
